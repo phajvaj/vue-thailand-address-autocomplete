@@ -2,26 +2,25 @@
   <div class="vth-addr-container" v-click-outside="onClickOutside">
     <div class="vth-addr-label" v-if="label">{{ label }}</div>
     <div class="vth-addr-input-container">
-      <input type="text"
-      v-model="currentValue"
-      :placeholder="placeholder"
-      :class="{
+      <v-text-field v-model="currentValue" :outlined="outlined" :clearable="clearable" :label="placeholder"
+                    :class="{
         'vth-addr-input-size-small': size === 'small',
         'vth-addr-input-size-default': size === 'default',
         'vth-addr-input-size-medium': size === 'medium',
         'vth-addr-input-size-large': size === 'large'
       }"
-      :style="{
+                    :style="{
         'border': hasFocus && currentColor !== '#f5f5f5' ? 'solid 1px ' + currentColor : 'solid 1px #d3d3d3'
       }"
-      autocomplete="disabled"
-      ref="input"
-      class="vth-addr-input"
-      @focus="hasFocus = true"
-      @blur="hasFocus = false"
-      @keydown.up="pressArrow('up')"
-      @keydown.down="pressArrow('down')"
-      @keydown.enter="pressEnter()">
+                    autocomplete="disabled"
+                    ref="input"
+                    class="vth-addr-input"
+                    @focus="hasFocus = true"
+                    @blur="hasFocus = false"
+                    @keydown.up="pressArrow('up')"
+                    @keydown.down="pressArrow('down')"
+                    @keydown.enter="pressEnter()"
+      ></v-text-field>
       <div v-if="resultsFromSearch.length && isOpenListContainer"
       ref="dropdown"
       class="vth-addr-list-container"
@@ -73,6 +72,12 @@ export default {
     type: {
       type: String
     },
+    outlined: {
+      type: Boolean
+    },
+    clearable: {
+      type: Boolean
+    },
     label: {
       type: String
     },
@@ -102,12 +107,12 @@ export default {
   computed: {
     resultsFromSearch () {
       if (this.type) {
-        if (this.type === 'district') return this.resultsFromSearchByDistrict
-        else if (this.type === 'amphoe') return this.resultsFromSearchByAmphoe
-        else if (this.type === 'province') return this.resultsFromSearchByProvince
-        else if (this.type === 'zipcode') return this.resultsFromSearchByZipcode
+        if (this.type === 'district') return this.resultsFromSearchByDistrict;
+        else if (this.type === 'amphoe') return this.resultsFromSearchByAmphoe;
+        else if (this.type === 'province') return this.resultsFromSearchByProvince;
+        else if (this.type === 'zipcode') return this.resultsFromSearchByZipcode;
       } else {
-        this._errorLog('type is undefined.')
+        this._errorLog('type is undefined.');
         return []
       }
     },
@@ -131,11 +136,11 @@ export default {
      * - Set itemOnFocus = first item.
      */
     currentValue (value) {
-      this.$emit('input', this.currentValue)
+      this.$emit('input', this.currentValue);
       if (this.hasFocus) {
-        this.isOpenListContainer = true
+        this.isOpenListContainer = true;
       }
-      this.itemOnFocus = 0
+      this.itemOnFocus = 0;
     },
     /**
      * - ถ้า v-model เปลี่ยนค่าจากนอก Component
@@ -144,7 +149,7 @@ export default {
      */
     value (value) {
       if (value !== this.currentValue) {
-        this.currentValue = value
+        this.currentValue = value;
         this.$nextTick(() => this.isOpenListContainer = false)
       }
     },
